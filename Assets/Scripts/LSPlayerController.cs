@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 
 // what object is this put on? our Player obj (can't add until errors resolved)
-public class LSPlayerControls : MonoBehaviour
+public class LSPlayerController : MonoBehaviour
 {
     #region Variables
     // starting position:

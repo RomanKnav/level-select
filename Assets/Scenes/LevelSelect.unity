@@ -281,7 +281,7 @@ PrefabInstance:
     - target: {fileID: 7735466902430721053, guid: 314b25acfe0e9eb4fb999a40bc3140f0,
         type: 3}
       propertyPath: m_RootOrder
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 7735466902430721053, guid: 314b25acfe0e9eb4fb999a40bc3140f0,
         type: 3}
@@ -2332,6 +2332,7 @@ GameObject:
   - component: {fileID: 1270763050}
   - component: {fileID: 1270763049}
   - component: {fileID: 1270763048}
+  - component: {fileID: 1270763047}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -2339,6 +2340,22 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &1270763047
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1270763046}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 29230954a51a9964c864affb710ee8ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  startPoint: {fileID: 949200187}
+  moveSpeed: 3
+  teleportTime: 1
+  playerSprite: {fileID: 315629811}
 --- !u!61 &1270763048
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -2465,7 +2482,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 2.1057348, y: 1}
+    m_SensorSize: {x: 1.3868195, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
