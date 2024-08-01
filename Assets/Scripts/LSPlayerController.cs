@@ -3,15 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-// what object is this put on?
+// what object is this put on? our Player obj (can't add until errors resolved)
 public class LSPlayerControls : MonoBehaviour
 {
     #region Variables
     // starting position:
-    [SerializedField] MapPoint startPoint = null;
-    [SerializedField] float moveSpeed = 3f;
-    [SerializedField] float teleportTime = 1f;
-    [SerializedField] Transform playerSprite = null;
+    [SerializeField] MapPoint startPoint = null;
+    [SerializeField] float moveSpeed = 3f;
+    [SerializeField] float teleportTime = 1f;
+    [SerializeField] Transform playerSprite = null;
 
     MapPoint[] allPoints;               // array of MapPoint objs
     MapPoint prevPoint, currentPoint;   // 2 vars declared on same line
@@ -34,7 +34,7 @@ public class LSPlayerControls : MonoBehaviour
 
     void Start() {
         animator = GetComponentInChildren<Animator>();
-        spriteRenderer = GetComponentInChildren<spriteRenderer>();
+        spriteRenderer = GetComponentInChildren<SpriteRenderer>();
         spriteRenderer.enabled = false;
         canMove = false;                            // initially true so why changed here?
         SetPlayerPos();
@@ -43,7 +43,7 @@ public class LSPlayerControls : MonoBehaviour
     void Update() {
         if (canMove) {
             // will this automatically fucking move character from 1 point to another??? yes. currentPoint.transform.position is the point to move to
-            transform.position = Vector3.MoveTowards(transform.position, currentPoint.transform.position, moveSpeed * Time.deltaTime());
+            transform.position = Vector3.MoveTowards(transform.position, currentPoint.transform.position, moveSpeed * Time.deltaTime);
 
             // wtf is going on here? if the distance between these 2 points (curr pos and next pos) is less than 0.1 unity units...
             if (Vector3.Distance(transform.position, currentPoint.transform.position) < 0.1f) {
@@ -132,7 +132,7 @@ public class LSPlayerControls : MonoBehaviour
                 direction = 0;          // none of the 4, so no movement
                 SetAnimation();
             }
-            if (currentPoint.autoWarp) {
+            if (currentPoint.autoWarped) {
                 StartCoroutine(TeleportPlayer(teleportTime));   
                 // what's coroutine again? NOT asynchronous.
             }
@@ -227,15 +227,57 @@ public class LSPlayerControls : MonoBehaviour
     }
 
     public void SelectLevel() {
+        // mouse click:
         if (Input.GetButtonDown("Fire1")) {
+            // what's it mean when a point is null?
             if (currentPoint != null) {
+                if (!currentPoint.isLocked && currentPoint.isLevel) {
+                    DataManager.instance.gameData.currentLevelName = currentPoint.sceneToLoad;
+                    DataManager.instance.SaveGameData();
 
+                    SceneManager.LoadScene(currentPoint.sceneToLoad);
+                }
+                // warp player to new island if warp point:
+                else if (currentPoint.isWarpPoint && !currentPoint.autoWarped) {
+                    StartCoroutine(TeleportPlayer(teleportTime));
+                }
             }
         }
     }
 
     IEnumerator TeleportPlayer(float time) {
-        yield return WaitForSeconds(time);
+        currentPoint.hasWarped = true;
+
+        canMove = false;    // disable player movement when teleporting
+
+        for (float t = 0.0f; t < 1.0f; t += Time.deltaTime / time) {
+            float newAlpha = Mathf.Lerp(1, 0, t);
+
+            // wtf is this?: make the player invisible????!!!! (yes, he fades away)
+            Color newColor = new Color(spriteRenderer.color.r, spriteRenderer.color.g, spriteRenderer.color.b, newAlpha);
+            spriteRenderer.color = newColor;
+            yield return new WaitForSeconds(time);
+        }
+
+        // teleport player: warpPoint, remember, is another MapPoint. Understood:
+        transform.position = currentPoint.warpPoint.transform.position;
+        yield return new WaitForSeconds(time);
+
+        for (float t = 0.0f; t < 1.0f; t += Time.deltaTime / time) {
+            float newAlpha = Mathf.Lerp(0, 1, t);   // simply rearranging shit will make player reappear
+
+            // wtf is this?: make the player invisible????!!!! (yes, he fades away)
+            Color newColor = new Color(spriteRenderer.color.r, spriteRenderer.color.g, spriteRenderer.color.b, newAlpha);
+            spriteRenderer.color = newColor;
+            yield return null;
+        }
+
+        currentPoint = currentPoint.warpPoint;
+
+        currentPoint.hasWarped = true;      // why do we do this twice?
+
+        canMove = true;     // after warping, movement's possible again
+
     }
     #endregion
 }
