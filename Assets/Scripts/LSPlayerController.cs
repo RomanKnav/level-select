@@ -126,6 +126,7 @@ public class LSPlayerController : MonoBehaviour
     }
 
     void CheckMapPoint() {
+        // Debug.Log(currentPoint.isWarpPoint);    // true on warp point
         // MapPoint properties:
         if (currentPoint.isWarpPoint && !currentPoint.hasWarped) {
             if (direction != 0) {
@@ -238,25 +239,30 @@ public class LSPlayerController : MonoBehaviour
                     SceneManager.LoadScene(currentPoint.sceneToLoad);
                 }
                 // warp player to new island if warp point:
+                // cannot teleport until player "fires" (clicks)
                 else if (currentPoint.isWarpPoint && !currentPoint.autoWarped) {
-                    StartCoroutine(TeleportPlayer(teleportTime));
+                    Debug.Log("teleporting...");
+                    StartCoroutine(TeleportPlayer(teleportTime));       // this shit is broken
                 }
             }
         }
     }
 
+    // executes only when player clicks ("fires"):
     IEnumerator TeleportPlayer(float time) {
-        currentPoint.hasWarped = true;
+        // what's this? MapPoint property.
+        currentPoint.hasWarped = true;      // set to true when the warp point has alr been used to teleport
 
         canMove = false;    // disable player movement when teleporting
 
+        // issue is in this for loop:
         for (float t = 0.0f; t < 1.0f; t += Time.deltaTime / time) {
             float newAlpha = Mathf.Lerp(1, 0, t);
 
             // wtf is this?: make the player invisible????!!!! (yes, he fades away)
             Color newColor = new Color(spriteRenderer.color.r, spriteRenderer.color.g, spriteRenderer.color.b, newAlpha);
             spriteRenderer.color = newColor;
-            yield return new WaitForSeconds(time);
+            yield return null;
         }
 
         // teleport player: warpPoint, remember, is another MapPoint. Understood:

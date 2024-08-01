@@ -108,7 +108,7 @@ public class MapPoint : MonoBehaviour
         }
     }
 
-    // shit to do when player exits collision with level:
+    // shit to do when player exits collision with level. Only possible if func above ^^^ executes
     void OnTriggerExit2D(Collider2D collision) {   // collision refers to other object.
         if (collision.tag == "Player") {
             if (levelPanel != null) 
