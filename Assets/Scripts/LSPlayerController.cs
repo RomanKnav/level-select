@@ -96,28 +96,28 @@ public class LSPlayerController : MonoBehaviour
     // very similar to prev func. Why 2?
     void CheckInput() {
         if (y > 0.5f) {
-            if (currentPoint.up != null) {
+            if (currentPoint.up != null && !currentPoint.up.isLocked) {
                 SetNextPoint(currentPoint.up);
                 direction = 1;
                 animationSet = false;
             }
         }
         if (x > 0.5f) {
-            if (currentPoint.right != null) {
+            if (currentPoint.right != null && !currentPoint.right.isLocked) {
                 SetNextPoint(currentPoint.right);
                 direction = 2;
                 animationSet = false;
             }            
         }
         if (y < -0.5f) {
-            if (currentPoint.down != null) {
+            if (currentPoint.down != null && !currentPoint.down.isLocked) {
                 SetNextPoint(currentPoint.down);
                 direction = 3;
                 animationSet = false;
             }            
         }
         if (x < -0.5f) {
-            if (currentPoint.left != null) {
+            if (currentPoint.left != null && !currentPoint.left.isLocked) {
                 SetNextPoint(currentPoint.left);
                 direction = 4;
                 animationSet = false;
@@ -126,14 +126,13 @@ public class LSPlayerController : MonoBehaviour
     }
 
     void CheckMapPoint() {
-        // Debug.Log(currentPoint.isWarpPoint);    // true on warp point
         // MapPoint properties:
         if (currentPoint.isWarpPoint && !currentPoint.hasWarped) {
             if (direction != 0) {
                 direction = 0;          // none of the 4, so no movement
                 SetAnimation();
             }
-            if (currentPoint.autoWarped) {
+            if (currentPoint.autoWarped && !currentPoint.isLocked) {
                 StartCoroutine(TeleportPlayer(teleportTime));   
                 // what's coroutine again? NOT asynchronous.
             }
@@ -240,7 +239,7 @@ public class LSPlayerController : MonoBehaviour
                 }
                 // warp player to new island if warp point:
                 // cannot teleport until player "fires" (clicks)
-                else if (currentPoint.isWarpPoint && !currentPoint.autoWarped) {
+                else if (currentPoint.isWarpPoint && !currentPoint.autoWarped && !currentPoint.isLocked) {
                     Debug.Log("teleporting...");
                     StartCoroutine(TeleportPlayer(teleportTime));       // this shit is broken
                 }

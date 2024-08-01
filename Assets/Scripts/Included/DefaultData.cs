@@ -7,6 +7,7 @@ public class DefaultData
     // String to store the current level to load and set as spawn point in the level select menu
     public string currentLevelName;
     // List of the game levels to set the scene to load & locked status
+    // how do the locked levels end up in here?
     public List<LockedLevels> lockedLevels = new List<LockedLevels>();
 }
 
