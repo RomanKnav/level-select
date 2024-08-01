@@ -19,7 +19,7 @@ public class MapPoint : MonoBehaviour
     public MapPoint right, down, left;      // different directions player can go
 
     [Header("Scene options")]
-    [SerializeField] int levelIndex = 0;
+    [SerializeField] int levelIndex = 0;            // difference between currentLevelIndex and this?
     [HideInInspector] public string sceneToLoad;    // what is this? does not show this public var in Inspector window
     [TextArea(1, 2)]
     public string levelName;
@@ -89,6 +89,8 @@ public class MapPoint : MonoBehaviour
     }
 
     void OnTriggerEnter2D(Collider2D collision) {   // collision refers to other object. What else but player can collide with the levels?
+        // Debug.Log(DataManager.instance.gameData.currentLevelName);  // why is this initially level2?
+
         if (collision.tag == "Player") {
             if (isLocked) {
                 if (levelPanel != null) 
