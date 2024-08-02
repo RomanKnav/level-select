@@ -12,8 +12,6 @@ public class SceneLoader : MonoBehaviour
     #region Unity Base Methods
     void Start()
     {
-        Debug.Log("Hi, I'm the scene loader, and you can't find me bitch! " + currentLevelIndex);
-
         // Start the load level method after 3 seconds
         Invoke("LoadLevel", 3f);
     }
@@ -28,7 +26,10 @@ public class SceneLoader : MonoBehaviour
             // Unlock the level
             DataManager.instance.gameData.lockedLevels[currentLevelIndex + 1].isLocked = false;
             // Save the data
-            DataManager.instance.SaveGameData();    
+
+            // DataManager.instance.SaveGameData(); 
+            DataManager.instance.TriggerSaveData();  
+
             // what exactly does this do?   
             /* UNDERSTOOD: since we switch back to the levelSelect scene after every level, we need to ensure it was found in it's previous state 
             (player position, locked/unlocked levels) */

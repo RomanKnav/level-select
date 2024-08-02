@@ -233,7 +233,7 @@ public class LSPlayerController : MonoBehaviour
             if (currentPoint != null) {
                 if (!currentPoint.isLocked && currentPoint.isLevel) {
                     DataManager.instance.gameData.currentLevelName = currentPoint.sceneToLoad;
-                    DataManager.instance.SaveGameData();
+                    // DataManager.instance.SaveGameData();
 
                     SceneManager.LoadScene(currentPoint.sceneToLoad);
                 }
@@ -248,6 +248,7 @@ public class LSPlayerController : MonoBehaviour
     }
 
     // executes only when player clicks ("fires"):
+    // is this public?
     IEnumerator TeleportPlayer(float time) {
         // what's this? MapPoint property.
         currentPoint.hasWarped = true;      // set to true when the warp point has alr been used to teleport

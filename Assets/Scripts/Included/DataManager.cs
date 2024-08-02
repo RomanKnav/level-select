@@ -1,5 +1,7 @@
-﻿using System.IO;
+﻿using System.Collections;
+using System.IO;
 using UnityEngine;
+using TMPro;
 
 // a data manager, like the one used in Lysteria
 // apperently this is what makes saving/loading possible:
@@ -11,7 +13,7 @@ public class DataManager : MonoBehaviour
 
     [Header("File Settings")]
     public string saveFileName = "GameData";        // this creates a file? yes, .json (line 42)
-    public string folderName = "SaveData";
+    public string folderName = "SaveData";          // where tf is this folder?
 
     [Header("Data Settings")]
     public DefaultData gameData = new DefaultData();    // where is gameData instance assigned?
@@ -19,6 +21,15 @@ public class DataManager : MonoBehaviour
     string defaultPath;
     string fileName;
     #endregion
+
+    // SAVING CRAP:
+    [Header("Saving Crap")]
+    [SerializeField] Canvas savingTextObject;  // the parent object containing the savingText. We pass the panelCanvas here. Not sure if necessary???
+
+    // [SerializeField] TextMeshProUGUI savingText;        // must be carried over across scenes
+    [SerializeField] GameObject savingText;        // must be carried over across scenes
+
+    [SerializeField] float savingTime = 3f;
 
     #region - Unity Base Methods
     void Awake()
@@ -34,6 +45,7 @@ public class DataManager : MonoBehaviour
         }
 
         DontDestroyOnLoad(gameObject);
+        DontDestroyOnLoad(savingTextObject);
     }
 
     void Start()
@@ -69,7 +81,8 @@ public class DataManager : MonoBehaviour
         }
         else
         {
-            SaveGameData();
+            // SaveGameData();     // runs if the save file does not exist
+            TriggerSaveData();
         }
     }
 
@@ -78,6 +91,28 @@ public class DataManager : MonoBehaviour
         // Save the data
         string saveData = JsonUtility.ToJson(gameData);
         File.WriteAllText(fileName, saveData);
+        savingText.SetActive(false);
+        Debug.Log("Data Saved!");
     }
+
+    // executed AFTER returning to level select from a level:
+    public void TriggerSaveData() {
+        Debug.Log("Trigger Saving Data...");
+        savingText.SetActive(true);
+        Invoke("SaveGameData", 3f);
+    }
+
+    // public IEnumerator SaveGameData()
+    // {
+    //     // Save the data
+    //     savingText.enabled = true;
+    //     Debug.Log("Saving Data...");    // this fucking prints twice
+
+    //     yield return new WaitForSeconds(savingTime);
+        
+    //     string saveData = JsonUtility.ToJson(gameData);
+    //     File.WriteAllText(fileName, saveData);
+    //     savingText.enabled = false;
+    // }
     #endregion
 }
