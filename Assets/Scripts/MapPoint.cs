@@ -3,16 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
-// what obj is this script put on? on the individual map point objects. Each is a gateway to a LEVEL.
-
 // note: a mapPoint is simply a gameObject with a square sprite, circle collider, and this script on it.
 
 // SCRIPT ADDED POST-DOWNLOAD:
 public class MapPoint : MonoBehaviour
 {
-    // way too many fucking vars
-
-    // wtf is region and endregion? just for organizing. Collapsable!
     #region Variables           
     [Header("Waypoints")]
     public MapPoint up;
@@ -20,7 +15,9 @@ public class MapPoint : MonoBehaviour
 
     [Header("Scene options")]
     [SerializeField] int levelIndex = 0;            // difference between currentLevelIndex and this?
-    [HideInInspector] public string sceneToLoad;    // what is this? does not show this public var in Inspector window
+    [HideInInspector] public string sceneToLoad;    
+    // what is this? does not show this public var in Inspector window. Where's it assigned? line 74
+
     [TextArea(1, 2)]
     public string levelName;
 
@@ -30,6 +27,10 @@ public class MapPoint : MonoBehaviour
     public bool isLevel;
     public bool isCorner;
     public bool isWarpPoint;
+
+    [Header("Level Crap")]
+    public bool beaten;
+
 
     // what is a warp point? point that takes to another "level"
     [Header("Warp Options")]
@@ -67,10 +68,9 @@ public class MapPoint : MonoBehaviour
                 spriteRenderer.sprite = null;
         }
 
-        // if we have a level...
+        // if we have selected a level...
         else {
             if (isLevel) {
-                // DataManger.cs has no fucking "sceneToLoad" property. But does have "currentLevelName"
                 sceneToLoad = DataManager.instance.gameData.lockedLevels[levelIndex].sceneToLoad;
                 isLocked = DataManager.instance.gameData.lockedLevels[levelIndex].isLocked;             // this is a bool
             }
@@ -80,6 +80,7 @@ public class MapPoint : MonoBehaviour
                 if (spriteRenderer.sprite != null) 
                     spriteRenderer.sprite = lockedSprite;   // apply locked image
             }
+            // if level is unlocked...
             else {
                 // use unlocked image:
                 if (spriteRenderer.sprite != null) 
@@ -101,6 +102,7 @@ public class MapPoint : MonoBehaviour
             }
             // if level unlocked, display levelName in levelPanel:
             else {
+                Debug.Log("Scene loaded at this level: " + DataManager.instance.gameData.lockedLevels[levelIndex].sceneToLoad);
                 if (levelPanel != null) 
                     levelPanel.SetActive(true); 
                 

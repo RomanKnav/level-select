@@ -1674,10 +1674,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca84977ecb05a184d829ca788ce75733, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mapPoints:
+  mapPointsToLock:
   - {fileID: 1253001647}
+  - {fileID: 837284300}
   - {fileID: 1147019547}
-  - {fileID: 87842707}
 --- !u!4 &824905472
 Transform:
   m_ObjectHideFlags: 0
@@ -2563,7 +2563,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   startPoint: {fileID: 949200187}
-  moveSpeed: 6
+  moveSpeed: 9
   teleportTime: 1
   playerSprite: {fileID: 315629811}
 --- !u!61 &1270763048

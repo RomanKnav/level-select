@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-// what object is this put on? our Player obj (can't add until errors resolved)
+// what object is this put on? our Player obj
 public class LSPlayerController : MonoBehaviour
 {
     #region Variables
     // starting position:
-    [SerializeField] MapPoint startPoint = null;
+    [SerializeField] MapPoint startPoint = null;    // the point where player starts, manually inputted.
     [SerializeField] float moveSpeed = 3f;
     [SerializeField] float teleportTime = 1f;
     [SerializeField] Transform playerSprite = null;
@@ -16,6 +16,7 @@ public class LSPlayerController : MonoBehaviour
     MapPoint[] allPoints;               // array of MapPoint objs
     MapPoint prevPoint, currentPoint;   // 2 vars declared on same line
     // wtf is currentPoint? our actual currentPoint or the next one?
+    
     // WHERE IS THIS ASSIGNED? we haven't assigned this script yet.
 
     Animator animator;                  // ANIMATING CRAP
@@ -29,7 +30,7 @@ public class LSPlayerController : MonoBehaviour
 
     #region Unity built-in Methods
     void Awake() {
-        allPoints = FindObjectsOfType<MapPoint>();   // notice that it's fucking PLURAL. Why done in awake()?
+        allPoints = FindObjectsOfType<MapPoint>();   // notice that it's fucking PLURAL. Gets ALL the fucking mapPoints
     }
 
     void Start() {
@@ -69,6 +70,33 @@ public class LSPlayerController : MonoBehaviour
     #endregion
 
     #region Custom Methods (A Shit Ton)
+
+    // when do we use this?
+    void SetPlayerPos() {
+        // what's happening here? it's a STRING that we manually insert in the editor if the mapPoint is a level!
+        // if we have a non-level point, set our point to the start point?
+        if (DataManager.instance.gameData.currentLevelName == "") {
+            transform.position = startPoint.transform.position;
+            spriteRenderer.enabled = true;
+            currentPoint = startPoint;              // HERE'S WHERE CURRENT/PREV POINTS SET
+            prevPoint = currentPoint;
+            canMove = true;
+        }
+        else {
+            foreach(MapPoint point in allPoints) {
+                if (point.isLevel) {
+                    if (point.sceneToLoad == DataManager.instance.gameData.currentLevelName) {
+                        transform.position = point.transform.position;
+                        spriteRenderer.enabled = true;
+                        currentPoint = point;
+                        prevPoint = currentPoint;
+                        canMove = true;
+                    }
+                }
+            }
+        }
+    }
+
     // what this do?
     void AutoMove() {
         if (currentPoint.up != null && currentPoint.up != prevPoint) {
@@ -193,32 +221,6 @@ public class LSPlayerController : MonoBehaviour
         currentPoint = nextPoint;                       // simply variables to change when player moves (smart)
     }
 
-    // when do we use this?
-    void SetPlayerPos() {
-        // what's happening here? it's a STRING that we manually insert in the editor if the mapPoint is a level!
-        // if we have a non-level point, set our point to the start point?
-        if (DataManager.instance.gameData.currentLevelName == "") {
-            transform.position = startPoint.transform.position;
-            spriteRenderer.enabled = true;
-            currentPoint = startPoint;
-            prevPoint = currentPoint;
-            canMove = true;
-        }
-        else {
-            foreach(MapPoint point in allPoints) {
-                if (point.isLevel) {
-                    if (point.sceneToLoad == DataManager.instance.gameData.currentLevelName) {
-                        transform.position = point.transform.position;
-                        spriteRenderer.enabled = true;
-                        currentPoint = point;
-                        prevPoint = currentPoint;
-                        canMove = true;
-                    }
-                }
-            }
-        }
-    }
-
     public void GetMovement() {
         // input vector
         movement = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
@@ -233,7 +235,6 @@ public class LSPlayerController : MonoBehaviour
             if (currentPoint != null) {
                 if (!currentPoint.isLocked && currentPoint.isLevel) {
                     DataManager.instance.gameData.currentLevelName = currentPoint.sceneToLoad;
-                    // DataManager.instance.SaveGameData();
 
                     SceneManager.LoadScene(currentPoint.sceneToLoad);
                 }

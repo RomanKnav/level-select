@@ -12,11 +12,11 @@ public class DataManager : MonoBehaviour
     public static DataManager instance;             // makes this a singleton
 
     [Header("File Settings")]
-    public string saveFileName = "GameData";        // this creates a file? yes, .json (line 42)
-    public string folderName = "SaveData";          // where tf is this folder?
+    public string saveFileName = "GameData";
+    public string folderName = "SaveData";          
 
     [Header("Data Settings")]
-    public DefaultData gameData = new DefaultData();    // where is gameData instance assigned?
+    public DefaultData gameData = new DefaultData(); 
 
     string defaultPath;
     string fileName;
@@ -101,18 +101,5 @@ public class DataManager : MonoBehaviour
         savingText.SetActive(true);
         Invoke("SaveGameData", 3f);
     }
-
-    // public IEnumerator SaveGameData()
-    // {
-    //     // Save the data
-    //     savingText.enabled = true;
-    //     Debug.Log("Saving Data...");    // this fucking prints twice
-
-    //     yield return new WaitForSeconds(savingTime);
-        
-    //     string saveData = JsonUtility.ToJson(gameData);
-    //     File.WriteAllText(fileName, saveData);
-    //     savingText.enabled = false;
-    // }
     #endregion
 }
