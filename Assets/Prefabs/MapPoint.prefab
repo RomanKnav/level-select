@@ -143,3 +143,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e95f3868af645bf4fa2ec0a8a48c66ab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  up: {fileID: 0}
+  right: {fileID: 0}
+  down: {fileID: 0}
+  left: {fileID: 0}
+  levelIndex: 0
+  sceneToLoad: 
+  levelName: 
+  isLocked: 0
+  isLevel: 0
+  isCorner: 0
+  isWarpPoint: 0
+  isBeaten: 0
+  beenPlayed: 0
+  autoWarped: 0
+  hasWarped: 0
+  warpPoint: {fileID: 0}
+  unlockedSprite: {fileID: 0}
+  lockedSprite: {fileID: 0}
+  levelText: {fileID: 0}
+  levelPanel: {fileID: 0}

@@ -28,5 +28,6 @@ public class LockedLevels
     public bool isLocked;
     public bool isBeaten;           // why do these vars have to be initiated twice?
     public bool beenPlayed;
+    public bool worstFuckery;
     #endregion
 }

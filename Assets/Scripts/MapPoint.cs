@@ -24,7 +24,7 @@ public class MapPoint : MonoBehaviour
     // for the different types of points on the map
     [Header("MapPoint Options")]
     [HideInInspector] public bool isLocked;         // also initiated in DefaultData
-    public bool isLevel;
+    public bool isLevel;        
     public bool isCorner;
     public bool isWarpPoint;
 
@@ -55,7 +55,7 @@ public class MapPoint : MonoBehaviour
 
     // RUNS WHEN AT A MAPPOINT
     void Start() {
-        spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+        spriteRenderer = GetComponentInChildren<SpriteRenderer>();      // sprite for map point
 
         // this is a GameObject:
         if (levelPanel != null) {
@@ -74,11 +74,12 @@ public class MapPoint : MonoBehaviour
         else {
             if (isLevel) {
                 // Debug.Log(beenPlayed);
+                // HERE is where our gameData.json's lockedLevels array is populated
                 sceneToLoad = DataManager.instance.gameData.lockedLevels[levelIndex].sceneToLoad;
                 isLocked = DataManager.instance.gameData.lockedLevels[levelIndex].isLocked;             // this is a bool
                 isBeaten = DataManager.instance.gameData.lockedLevels[levelIndex].isBeaten;
                 // beenPlayed = DataManager.instance.gameData.lockedLevels[levelIndex].beenPlayed;
-            }
+            }   
 
             if (isLocked) {
                 // in what kind of scenario would this actually be null?
@@ -108,7 +109,6 @@ public class MapPoint : MonoBehaviour
             }
             // if level unlocked, display levelName in levelPanel:
             else {
-                // Debug.Log("Scene loaded at this level: " + DataManager.instance.gameData.lockedLevels[levelIndex].sceneToLoad);
                 if (levelPanel != null) 
                     levelPanel.SetActive(true); 
                 

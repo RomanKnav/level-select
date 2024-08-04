@@ -58,6 +58,8 @@ public class DataManager : MonoBehaviour
         if (!FolderExists(defaultPath))
         {
             Directory.CreateDirectory(defaultPath);
+        } else {
+            Debug.Log(defaultPath);
         }
 
         // Load the data
