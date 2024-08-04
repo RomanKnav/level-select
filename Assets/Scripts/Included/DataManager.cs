@@ -77,7 +77,7 @@ public class DataManager : MonoBehaviour
         if (File.Exists(fileName))
         {
             string saveData = File.ReadAllText(fileName);
-            gameData = JsonUtility.FromJson<DefaultData>(saveData);
+            gameData = JsonUtility.FromJson<DefaultData>(saveData);     // if gameData already exists (initially empty) load it up
         }
         else
         {

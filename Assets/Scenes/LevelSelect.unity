@@ -2752,14 +2752,24 @@ MonoBehaviour:
     lockedLevels:
     - sceneToLoad: Level1
       isLocked: 0
+      isBeaten: 0
+      beenPlayed: 0
     - sceneToLoad: Level2
       isLocked: 1
+      isBeaten: 0
+      beenPlayed: 0
     - sceneToLoad: Level3
       isLocked: 1
+      isBeaten: 0
+      beenPlayed: 0
     - sceneToLoad: Level4
       isLocked: 1
+      isBeaten: 0
+      beenPlayed: 0
     - sceneToLoad: Level5
       isLocked: 1
+      isBeaten: 0
+      beenPlayed: 0
   savingTextObject: {fileID: 390318905}
   savingText: {fileID: 313581483}
   savingTime: 3

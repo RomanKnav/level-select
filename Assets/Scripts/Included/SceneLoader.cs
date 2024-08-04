@@ -18,6 +18,7 @@ public class SceneLoader : MonoBehaviour
     #endregion 
 
     #region User Methods
+    // loads up the scene for the respective level
     void LoadLevel()
     {
         // Check if the level we want to unlock is NOT out of bounds of our list count.

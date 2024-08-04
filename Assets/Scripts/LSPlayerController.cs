@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 
 // what object is this put on? our Player obj
+// YES, currentPoint properties are modified here. THEY DON'T EVEN FUCKING WORK!!!
 public class LSPlayerController : MonoBehaviour
 {
     #region Variables
@@ -13,11 +14,11 @@ public class LSPlayerController : MonoBehaviour
     [SerializeField] float teleportTime = 1f;
     [SerializeField] Transform playerSprite = null;
 
-    MapPoint[] allPoints;               // array of MapPoint objs
+    MapPoint[] allPoints;               // array of MapPoint objs. Where are these assigned? in Awake()
     MapPoint prevPoint, currentPoint;   // 2 vars declared on same line
-    // wtf is currentPoint? our actual currentPoint or the next one?
+    // wtf is currentPoint? our actual currentPoint or the next one? actual current
     
-    // WHERE IS THIS ASSIGNED? we haven't assigned this script yet.
+    // WHERE IS THIS ASSIGNED? DONE IN SetPlayerPos()
 
     Animator animator;                  // ANIMATING CRAP
     SpriteRenderer spriteRenderer;
@@ -39,6 +40,9 @@ public class LSPlayerController : MonoBehaviour
         spriteRenderer.enabled = false;
         canMove = false;                            // initially true so why changed here?
         SetPlayerPos();
+        Debug.Log("has this level been played? " + currentPoint.beenPlayed);   // why does this log cause transform.position to say not set to instance of object
+        // Debug.Log("has this point been warped? " + currentPoint.hasWarped);
+        currentPoint.beenPlayed = true;     // why isn't this being set?
     }
 
     void Update() {
@@ -71,20 +75,22 @@ public class LSPlayerController : MonoBehaviour
 
     #region Custom Methods (A Shit Ton)
 
-    // when do we use this?
+    // when do we use this? in start. first If statement initializes player position
     void SetPlayerPos() {
         // what's happening here? it's a STRING that we manually insert in the editor if the mapPoint is a level!
         // if we have a non-level point, set our point to the start point?
         if (DataManager.instance.gameData.currentLevelName == "") {
-            transform.position = startPoint.transform.position;
+            transform.position = startPoint.transform.position;     // StartPoint is ACTUALLY assigned
             spriteRenderer.enabled = true;
-            currentPoint = startPoint;              // HERE'S WHERE CURRENT/PREV POINTS SET
-            prevPoint = currentPoint;
+            currentPoint = startPoint;                              // HERE'S WHERE CURRENT/PREV POINTS SET
+            prevPoint = currentPoint;                               // there should be no other point before StartPoint
             canMove = true;
         }
+        // if StartPoint is already assigned a value...
         else {
             foreach(MapPoint point in allPoints) {
                 if (point.isLevel) {
+                    // wtf is going on here? 
                     if (point.sceneToLoad == DataManager.instance.gameData.currentLevelName) {
                         transform.position = point.transform.position;
                         spriteRenderer.enabled = true;
@@ -236,6 +242,7 @@ public class LSPlayerController : MonoBehaviour
                 if (!currentPoint.isLocked && currentPoint.isLevel) {
                     DataManager.instance.gameData.currentLevelName = currentPoint.sceneToLoad;
 
+                    // currentPoint.beenPlayed = true;
                     SceneManager.LoadScene(currentPoint.sceneToLoad);
                 }
                 // warp player to new island if warp point:

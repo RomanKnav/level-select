@@ -23,13 +23,14 @@ public class MapPoint : MonoBehaviour
 
     // for the different types of points on the map
     [Header("MapPoint Options")]
-    [HideInInspector] public bool isLocked;
+    [HideInInspector] public bool isLocked;         // also initiated in DefaultData
     public bool isLevel;
     public bool isCorner;
     public bool isWarpPoint;
 
     [Header("Level Crap")]
-    public bool beaten;
+    [HideInInspector] public bool isBeaten;
+    [HideInInspector] public bool beenPlayed;
 
 
     // what is a warp point? point that takes to another "level"
@@ -52,6 +53,7 @@ public class MapPoint : MonoBehaviour
 
     #region Unity Base Methods
 
+    // RUNS WHEN AT A MAPPOINT
     void Start() {
         spriteRenderer = GetComponentInChildren<SpriteRenderer>();
 
@@ -71,8 +73,11 @@ public class MapPoint : MonoBehaviour
         // if we have selected a level...
         else {
             if (isLevel) {
+                // Debug.Log(beenPlayed);
                 sceneToLoad = DataManager.instance.gameData.lockedLevels[levelIndex].sceneToLoad;
                 isLocked = DataManager.instance.gameData.lockedLevels[levelIndex].isLocked;             // this is a bool
+                isBeaten = DataManager.instance.gameData.lockedLevels[levelIndex].isBeaten;
+                // beenPlayed = DataManager.instance.gameData.lockedLevels[levelIndex].beenPlayed;
             }
 
             if (isLocked) {
@@ -87,6 +92,7 @@ public class MapPoint : MonoBehaviour
                     spriteRenderer.sprite = unlockedSprite;
             }
         }
+        Debug.Log("Number of locked levels: " + DataManager.instance.gameData.lockedLevels.Count);      // THIS HAS 5
     }
 
     void OnTriggerEnter2D(Collider2D collision) {   // collision refers to other object. What else but player can collide with the levels?
@@ -102,7 +108,7 @@ public class MapPoint : MonoBehaviour
             }
             // if level unlocked, display levelName in levelPanel:
             else {
-                Debug.Log("Scene loaded at this level: " + DataManager.instance.gameData.lockedLevels[levelIndex].sceneToLoad);
+                // Debug.Log("Scene loaded at this level: " + DataManager.instance.gameData.lockedLevels[levelIndex].sceneToLoad);
                 if (levelPanel != null) 
                     levelPanel.SetActive(true); 
                 

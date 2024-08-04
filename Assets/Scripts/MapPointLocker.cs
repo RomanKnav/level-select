@@ -27,17 +27,26 @@ public class MapPointLocker : MonoBehaviour
     // I understand this now. each if statements will lock points if the one in question is locked too.
     void LockMapPoints() {
         // index 0 not included because that's level 1!
+        // formula is: if this point is  ..., lock these other points
 
         if (DataManager.instance.gameData.lockedLevels[1].isLocked) {
             // if level 2 is locked, lock corner 1. We need to also lock warp1
             mapPointsToLock[0].isLocked = true;   // this will lock the fucking corner (yes, need to beat level 1 first)
-            mapPointsToLock[1].isLocked = true;   // this will lock the fucking corner (yes, need to beat level 1 first)
-            mapPointsToLock[2].isLocked = true;   // this will lock the fucking corner (yes, need to beat level 1 first)
+            mapPointsToLock[1].isLocked = true;   
+            mapPointsToLock[2].isLocked = true;   
             // how is this corner 1? isn't mapPointsToLock[0] level 1?
         }
         // if (DataManager.instance.gameData.lockedLevels[2].isLocked) {
         //     mapPointsToLock[1].isLocked = true;
         // }
+
+        // if (!DataManager.instance.gameData.lockedLevels[1].isBeaten) {
+        //     // is level 2 remains unbeaten, keep warp1 locked
+        //     mapPointsToLock[2].isLocked = true; 
+        // }
     }
+    // if level2 is not played, warpPoint should be locked
+
+
     #endregion
 }
