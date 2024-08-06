@@ -10,14 +10,15 @@ public class MapPoint : MonoBehaviour
 {
     #region Variables           
     [Header("Waypoints")]
-    public MapPoint up;
-    public MapPoint right, down, left;      // different directions player can go
+    // public MapPoint up;                     // why is this made?
+    public MapPoint up, right, down, left;      // different directions player can go
 
     [Header("Scene options")]
-    [SerializeField] int levelIndex = 0;            // difference between currentLevelIndex and this?
+    [SerializeField] int levelIndex = 0;            // difference between currentLevelIndex and this? doesn't fucking matter. Former not used here. 
     [HideInInspector] public string sceneToLoad;    
     // what is this? does not show this public var in Inspector window. Where's it assigned? line 74
 
+    // wtf is this? signifies a multi-line text area (for us, 1st line: island, 2nd line: level)
     [TextArea(1, 2)]
     public string levelName;
 
@@ -33,7 +34,7 @@ public class MapPoint : MonoBehaviour
     [HideInInspector] public bool beenPlayed;
 
 
-    // what is a warp point? point that takes to another "level"
+    // what is a warp point? point that takes to another island
     [Header("Warp Options")]
     public bool autoWarped;
     [HideInInspector] public bool hasWarped;
@@ -59,7 +60,7 @@ public class MapPoint : MonoBehaviour
 
         // this is a GameObject:
         if (levelPanel != null) {
-            levelPanel.SetActive(false);    // hidden by default
+            levelPanel.SetActive(false);    // panel is hidden by default
         }
 
         // a warp point is a point on the map that takes player from 1 map to another:

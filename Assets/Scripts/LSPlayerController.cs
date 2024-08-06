@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-// what object is this put on? our Player obj
-// YES, currentPoint properties are modified here. THEY DON'T EVEN FUCKING WORK!!!
+// what object is this put on? our Player object
+// transform.position refers to player. currentPoint.transform.position is a mapPoint.
 public class LSPlayerController : MonoBehaviour
 {
     #region Variables
@@ -17,13 +17,14 @@ public class LSPlayerController : MonoBehaviour
     MapPoint[] allPoints;               // array of MapPoint objs. Where are these assigned? in Awake()
     MapPoint prevPoint, currentPoint;   // 2 vars declared on same line
     // wtf is currentPoint? our actual currentPoint or the next one? actual current
+    // where assigned?
     
     // WHERE IS THIS ASSIGNED? DONE IN SetPlayerPos()
 
-    Animator animator;                  // ANIMATING CRAP
+    Animator animator;                  // ANIMATING CRAP       
     SpriteRenderer spriteRenderer;
     float x, y;
-    bool canMove = true;
+    bool canMove = true;                // why's this initially true?
     int direction; 
     bool animationSet = false;
     Vector2 movement;                   // vector to store input in
@@ -40,19 +41,19 @@ public class LSPlayerController : MonoBehaviour
         spriteRenderer.enabled = false;
         canMove = false;                            // initially true so why changed here?
         SetPlayerPos();
-        Debug.Log("has this level been played? " + currentPoint.beenPlayed);   // why does this log cause transform.position to say not set to instance of object
         // Debug.Log("has this point been warped? " + currentPoint.hasWarped);
         currentPoint.beenPlayed = true;     // why isn't this being set?
     }
 
     void Update() {
+        Debug.Log(currentPoint.name + ". Can Player move? " + canMove);
         if (canMove) {
             // will this automatically fucking move character from 1 point to another??? yes. currentPoint.transform.position is the point to move to
             transform.position = Vector3.MoveTowards(transform.position, currentPoint.transform.position, moveSpeed * Time.deltaTime);
 
             // wtf is going on here? if the distance between these 2 points (curr pos and next pos) is less than 0.1 unity units...
             if (Vector3.Distance(transform.position, currentPoint.transform.position) < 0.1f) {
-                
+                // once mapPoint reached, different scenarios unfold depending on the point type:
                 CheckMapPoint();
             }
             else {
@@ -66,7 +67,7 @@ public class LSPlayerController : MonoBehaviour
 
     /// <summary>
     /// This function is called every fixed framerate frame, if the MonoBehaviour is enabled.
-    /// unlike Update() (runs every frame, this runs every X frames):
+    /// unlike Update(), this is Frame-Independent (by default, runs every 0.02 seconds)
     void FixedUpdate()
     {
         GetMovement();    
@@ -82,7 +83,7 @@ public class LSPlayerController : MonoBehaviour
         if (DataManager.instance.gameData.currentLevelName == "") {
             transform.position = startPoint.transform.position;     // StartPoint is ACTUALLY assigned
             spriteRenderer.enabled = true;
-            currentPoint = startPoint;                              // HERE'S WHERE CURRENT/PREV POINTS SET
+            currentPoint = startPoint;                              // currentPoint initialized as startPoint
             prevPoint = currentPoint;                               // there should be no other point before StartPoint
             canMove = true;
         }
@@ -103,7 +104,7 @@ public class LSPlayerController : MonoBehaviour
         }
     }
 
-    // what this do?
+    // what this do? Automatically move player at corners
     void AutoMove() {
         if (currentPoint.up != null && currentPoint.up != prevPoint) {
             SetNextPoint(currentPoint.up);
@@ -127,7 +128,7 @@ public class LSPlayerController : MonoBehaviour
         }
     }
 
-    // very similar to prev func. Why 2?
+    // AS SOON as input is pressed, change the currentPoint
     void CheckInput() {
         if (y > 0.5f) {
             if (currentPoint.up != null && !currentPoint.up.isLocked) {
@@ -159,12 +160,13 @@ public class LSPlayerController : MonoBehaviour
         }
     }
 
+    // when this run? when player's reached currentPoint
     void CheckMapPoint() {
         // MapPoint properties:
         if (currentPoint.isWarpPoint && !currentPoint.hasWarped) {
             if (direction != 0) {
                 direction = 0;          // none of the 4, so no movement
-                SetAnimation();
+                SetAnimation();         // what's this animation? plays walk/idle animations depending on direction
             }
             if (currentPoint.autoWarped && !currentPoint.isLocked) {
                 StartCoroutine(TeleportPlayer(teleportTime));   
@@ -234,6 +236,7 @@ public class LSPlayerController : MonoBehaviour
         y = movement.y;
     }
 
+    // when does this happen?
     public void SelectLevel() {
         // mouse click:
         if (Input.GetButtonDown("Fire1")) {
